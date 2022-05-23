@@ -1,19 +1,16 @@
-var WebSocket = require('ws').WebSocket
-const ws = new WebSocket('ws://172.10.3.126:6080')
+const Koa = require("koa")
+const InitManager = require("./core/init")
+const body = require('koa-bodyparser')
+const catchError = require('./middlewares/exception')
 
-ws.onopen = function (e) {
-  //成功连接服务器回调
-  console.log('客户端（client）：与服务器的连接已打开')
-  ws.send('client connected')
-}
+const app = new Koa()
+
+// 注册异常中间件
+app.use(catchError)
+// 注册parser
+app.use(body())
+// 注册路由
+InitManager.initCore(app)
 
 
-const WebSocketServer = require('ws').Server
-const wss = new WebSocketServer({port: 8806})
-
-wss.on('connection', (conn) => {
-  conn.on('message', (data)=> {
-    const msg = data.toString('utf-8')
-    ws.send(msg)
-  })
-})
+app.listen(8000)
