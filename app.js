@@ -6,7 +6,7 @@ const catchError = require('./middlewares/exception')
 const app = new Koa()
 
 // 注册异常中间件
-app.use(catchError)
+// app.use(catchError)
 // 注册parser
 app.use(body())
 // 注册路由
